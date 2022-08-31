@@ -38,7 +38,7 @@ while 1: ###
 			if rise/run > -0.25: #NORMALLY -0.05
 				slope = rise/run
 				print(slope)
-				print('slope > -0.5\n')
+				print('slope > -0.25\n')
 				continue
 			else:
 				###
