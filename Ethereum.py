@@ -13,6 +13,7 @@ old_sellprice = 0.0
 total_profit = 0.0
 old_profit = 0.0
 w = 1 #W means wait
+x = 1 #X means wait
 
 key = "https://api.binance.com/api/v3/ticker/price?symbol="
 currencies = ["ETHUSDT"] #MAYBE ADD BTC SOON
@@ -26,7 +27,7 @@ while 1: ###
 			data = data.json()
 			buyprice = float(f"{data['price']}")
 			start = timer()
-			time.sleep(5) #OLD VALUE 15
+			time.sleep(3) #OLD VALUE 15
 			url = key+currencies[0]  
 			data = requests.get(url)
 			data = data.json()
@@ -34,10 +35,10 @@ while 1: ###
 			end = timer()
 			rise = cprice1 - buyprice
 			run = end - start
-			if rise/run > -0.05:
+			if rise/run > -0.25: #NORMALLY -0.05
 				slope = rise/run
 				print(slope)
-				print('slope > -0.05\n')
+				print('slope > -0.5\n')
 				continue
 			else:
 				###
@@ -46,12 +47,12 @@ while 1: ###
 					data = requests.get(url)
 					data = data.json()
 					fc1 = float(f"{data['price']}") #FINAL CHECK 1
-					time.sleep(10) ###TEST THIS NUMBER HEAVILY (ei 15)
+					time.sleep(3) ###TEST THIS NUMBER HEAVILY (ei 15)
 					url = key+currencies[0]  
 					data = requests.get(url)
 					data = data.json()
 					fc2 = float(f"{data['price']}") #FINAL CHECK 2
-					if fc1 > fc2 and cprice1 > fc2: #ALSO TRY FC1
+					if fc1 >= fc2 and cprice1 >= fc2: #ALSO TRY FC1
 						w = 1
 					else:
 						w = 0
@@ -74,10 +75,22 @@ while 1: ###
 					execute = 0 ###
 				else: ###
 					pass ###
-				if sellprice >= buyprice and sellprice - buyprice >= 0.25: #OR 0.5
-					url = key+currencies[0]  
-					data = requests.get(url)
-					data = data.json()
+				if sellprice >= buyprice and sellprice - buyprice >= 0.25: #OR 0.25
+					##########
+					while w == 1:
+						#url = key+currencies[0]  
+						#data = requests.get(url)
+						data = requests.get(url).json()
+						fc1 = float(f"{data['price']}") #FINAL CHECK 1
+						#url = key+currencies[0]  
+						#data = requests.get(url)
+						data = requests.get(url).json()
+						fc2 = float(f"{data['price']}") #FINAL CHECK 2
+						if fc1 <= fc2: #and fc2 <= buyprice:
+							w = 1
+						else:
+							w = 0
+					##########
 					sellprice = float(f"{data['price']}") #THIS SIMULATES SELLING
 					profit = sellprice - buyprice
 					print('\nSOLD')
