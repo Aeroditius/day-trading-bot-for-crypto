@@ -10,16 +10,19 @@ mstart = timer() #MSTART MASTER START | MEND MASTER END | MTIME MASTER TIME
 buyprice = 0.0
 sellprice = 0.0
 old_sellprice = 0.0
-total_profit = 0.0
+total_profit = 0.0 #STARTS AT 10 FOR FIRST ITERATION TO CATCH IN CASE OF FALLING PRICES
 old_profit = 0.0
 w = 1 #W means wait
 x = 1 #X means wait
+checkerrorm = 5
 
 key = "https://api.binance.com/api/v3/ticker/price?symbol="
 currencies = ["ETHUSDT"] #MAYBE ADD BTC SOON
 
 while 1: ###
 	try: ###
+		'''
+		'''
 		while 1:
 			#BUY
 			url = key+currencies[0]  
@@ -27,7 +30,7 @@ while 1: ###
 			data = data.json()
 			buyprice = float(f"{data['price']}")
 			start = timer()
-			time.sleep(3) #OLD VALUE 15
+			time.sleep(5) #OLD VALUE 15
 			url = key+currencies[0]  
 			data = requests.get(url)
 			data = data.json()
@@ -35,10 +38,10 @@ while 1: ###
 			end = timer()
 			rise = cprice1 - buyprice
 			run = end - start
-			if rise/run > -0.25: #NORMALLY -0.05
+			if rise/run > -0.05: #NORMALLY -0.05
 				slope = rise/run
 				print(slope)
-				print('slope > -0.25\n')
+				print('slope > -0.05\n')
 				continue
 			else:
 				###
@@ -47,7 +50,7 @@ while 1: ###
 					data = requests.get(url)
 					data = data.json()
 					fc1 = float(f"{data['price']}") #FINAL CHECK 1
-					time.sleep(3) ###TEST THIS NUMBER HEAVILY (ei 15)
+					#time.sleep(3) ###TEST THIS NUMBER HEAVILY (ei 15)
 					url = key+currencies[0]  
 					data = requests.get(url)
 					data = data.json()
@@ -61,6 +64,8 @@ while 1: ###
 				print('Bought at: %f' %buyprice)
 				start1 = timer() ###
 				execute = 1
+			'''
+			'''
 			while 1:
 				#SELL
 				url = key+currencies[0]
@@ -104,6 +109,27 @@ while 1: ###
 					#
 					old_profit = total_profit
 					break
+				elif sellprice <= buyprice:
+					##########
+					checkerror = sellprice - buyprice
+					checkerrorp = checkerrorm
+					checkerrorf = checkerror / checkerrorp
+					checkerrorff = checkerrorf * -1
+					if checkerrorff > 0.1:
+						sellprice = float(f"{data['price']}") #THIS SIMULATES SELLING
+						profit = sellprice - buyprice
+						print('\nSOLD')
+						print('Profit: %f' %profit)
+						total_profit = profit + old_profit
+						print('Total profit: %f' %total_profit)
+						#
+						mend = timer()
+						mtime = mend - mstart
+						print('Elapsed time: %f seconds\n' %mtime)
+						#
+						old_profit = total_profit
+						break
+						##########
 				else:
 					pass
 	except ConnectionResetError: ###
