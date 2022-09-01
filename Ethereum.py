@@ -49,7 +49,7 @@ while 1: ###
 					data = requests.get(url)
 					data = data.json()
 					fc1 = float(f"{data['price']}") #FINAL CHECK 1
-					#time.sleep(3) ###TEST THIS NUMBER HEAVILY (ei 15)
+					time.sleep(15) ###TEST THIS NUMBER HEAVILY (ei 15)
 					url = key+currencies[0]  
 					data = requests.get(url)
 					data = data.json()
@@ -79,7 +79,7 @@ while 1: ###
 					execute = 0 ###
 				else: ###
 					pass ###
-				if sellprice >= buyprice and sellprice - buyprice >= 0.25: #OR 0.25
+				if sellprice - buyprice >= 0.2: #OR 0.25
 					##########
 					while w == 1:
 						#url = key+currencies[0]  
