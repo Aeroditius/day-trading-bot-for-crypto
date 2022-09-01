@@ -14,7 +14,6 @@ total_profit = 0.0 #STARTS AT 10 FOR FIRST ITERATION TO CATCH IN CASE OF FALLING
 old_profit = 0.0
 w = 1 #W means wait
 x = 1 #X means wait
-checkerrorm = 5
 
 key = "https://api.binance.com/api/v3/ticker/price?symbol="
 currencies = ["ETHUSDT"] #MAYBE ADD BTC SOON
@@ -111,11 +110,7 @@ while 1: ###
 					break
 				elif sellprice <= buyprice:
 					##########
-					checkerror = sellprice - buyprice
-					checkerrorp = checkerrorm
-					checkerrorf = checkerror / checkerrorp
-					checkerrorff = checkerrorf * -1
-					if checkerrorff > 0.1:
+					if sellprice - buyprice < -5:
 						sellprice = float(f"{data['price']}") #THIS SIMULATES SELLING
 						profit = sellprice - buyprice
 						print('\nSOLD')
