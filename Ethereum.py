@@ -5,7 +5,15 @@ import json
 import requests
 from timeit import default_timer as timer
 
-mstart = timer() #MSTART MASTER START | MEND MASTER END | MTIME MASTER TIME
+#key = "https://api.binance.com/api/v3/ticker/price?symbol="
+#currencies = ["ETHUSDT"] #MAYBE ADD BTC SOON
+#url = key+currencies[0]
+url = "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
+
+# Place a market order by specifying amount of USD to use. 
+# Alternatively, `size` could be used to specify quantity in BTC amount.
+
+#auth_client.place_market_order(product_id='ETH-USD', side='buy', funds='100.00')
 
 buyprice = 0.0
 sellprice = 0.0
@@ -15,8 +23,7 @@ old_profit = 0.0
 w = 1 #W means wait
 x = 1 #X means wait
 
-key = "https://api.binance.com/api/v3/ticker/price?symbol="
-currencies = ["ETHUSDT"] #MAYBE ADD BTC SOON
+mstart = timer() #MSTART MASTER START | MEND MASTER END | MTIME MASTER TIME
 
 while 1: ###
 	try: ###
@@ -24,15 +31,11 @@ while 1: ###
 		'''
 		while 1:
 			#BUY
-			url = key+currencies[0]  
-			data = requests.get(url)
-			data = data.json()
+			data = requests.get(url).json()
 			buyprice = float(f"{data['price']}")
 			start = timer()
 			time.sleep(5) #OLD VALUE 15
-			url = key+currencies[0]  
-			data = requests.get(url)
-			data = data.json()
+			data = requests.get(url).json()
 			cprice1 = float(f"{data['price']}") #no sell price because didn't sell yet | cprice = check price
 			end = timer()
 			rise = cprice1 - buyprice
@@ -45,14 +48,10 @@ while 1: ###
 			else:
 				###
 				while w == 1:
-					url = key+currencies[0]  
-					data = requests.get(url)
-					data = data.json()
+					data = requests.get(url).json()
 					fc1 = float(f"{data['price']}") #FINAL CHECK 1
 					time.sleep(15) ###TEST THIS NUMBER HEAVILY (ei 15)
-					url = key+currencies[0]  
-					data = requests.get(url)
-					data = data.json()
+					data = requests.get(url).json()
 					fc2 = float(f"{data['price']}") #FINAL CHECK 2
 					if fc1 >= fc2 and cprice1 >= fc2: #ALSO TRY FC1
 						w = 1
@@ -67,9 +66,7 @@ while 1: ###
 			'''
 			while 1:
 				#SELL
-				url = key+currencies[0]
-				data = requests.get(url) #
-				data = data.json()
+				data = requests.get(url).json()
 				sellprice = float(f"{data['price']}")
 				print(sellprice)
 				if execute == 1: ###
@@ -82,12 +79,8 @@ while 1: ###
 				if sellprice - buyprice >= 0.2: #OR 0.25
 					##########
 					while w == 1:
-						#url = key+currencies[0]  
-						#data = requests.get(url)
 						data = requests.get(url).json()
 						fc1 = float(f"{data['price']}") #FINAL CHECK 1
-						#url = key+currencies[0]  
-						#data = requests.get(url)
 						data = requests.get(url).json()
 						fc2 = float(f"{data['price']}") #FINAL CHECK 2
 						if fc1 <= fc2: #and fc2 <= buyprice:
@@ -110,7 +103,7 @@ while 1: ###
 					break
 				elif sellprice <= buyprice:
 					##########
-					if sellprice - buyprice < -5:
+					if sellprice - buyprice < -10 :
 						sellprice = float(f"{data['price']}") #THIS SIMULATES SELLING
 						profit = sellprice - buyprice
 						print('\nSOLD')
