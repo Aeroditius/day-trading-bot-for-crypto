@@ -62,6 +62,7 @@ while 1:
 				data = requests.get(url).json()
 				fc = float(f"{data['price']}") #FINAL CHECK
 				if old_fc <= fc: #<>=
+					old_fc = fc
 					continue
 				else:
 					break
