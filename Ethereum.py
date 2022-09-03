@@ -26,9 +26,10 @@ while 1:
 	data = requests.get(url).json()
 	buyprice = float(f"{data['price']}")
 	start = timer()
-	time.sleep(5) #OLD VALUE 15
+	time.sleep(10) #OLD VALUE 15
 	data = requests.get(url).json()
 	cprice1 = float(f"{data['price']}") #no sell price because didn't sell yet | cprice = check price
+	old_fc = cprice1
 	end = timer()
 	rise = cprice1 - buyprice
 	run = end - start
@@ -38,22 +39,16 @@ while 1:
 		print('slope > -0.05\n')
 		continue
 	else:
-		###
-		while w == 1:
+		while 1:
 			data = requests.get(url).json()
-			fc1 = float(f"{data['price']}") #FINAL CHECK 1
-			time.sleep(15) ###TEST THIS NUMBER HEAVILY (ei 15)
-			data = requests.get(url).json()
-			fc2 = float(f"{data['price']}") #FINAL CHECK 2
-			if fc1 >= fc2 and cprice1 >= fc2: #ALSO TRY FC1
-				w = 1
+			fc = float(f"{data['price']}") #FINAL CHECK
+			if old_fc >= fc and cprice1 >= fc:
+				old_fc = fc
+				continue
 			else:
-				w = 0
-		###
-		buyprice = float(f"{data['price']}") #THIS SIMULATES BUYING
-		print('Bought at: %f' %buyprice)
-		start1 = timer() ###
-		execute = 1
+				buyprice = float(f"{data['price']}") #THIS SIMULATES BUYING
+				print('Bought at: %f' %buyprice)
+				break
 	'''
 	'''
 	while 1:
@@ -61,27 +56,14 @@ while 1:
 		data = requests.get(url).json()
 		sellprice = float(f"{data['price']}")
 		print(sellprice)
-		'''
-		if execute == 1: ###
-			end1 = timer() ###
-			ttime = end1 - start1 ###
-			print('Transition time is %f' %ttime) ###
-			execute = 0 ###
-		else: ###
-			pass ###
-		'''
 		if sellprice - buyprice >= 0.1: #OR 0.25
-			##########
-			while w == 1:
+			while 1:
 				data = requests.get(url).json()
-				fc1 = float(f"{data['price']}") #FINAL CHECK 1
-				data = requests.get(url).json()
-				fc2 = float(f"{data['price']}") #FINAL CHECK 2
-				if fc1 <= fc2: #and fc2 <= buyprice:
-					w = 1
+				fc = float(f"{data['price']}") #FINAL CHECK
+				if old_fc <= fc:
+					continue
 				else:
-					w = 0
-			##########
+					break
 			sellprice = float(f"{data['price']}") #THIS SIMULATES SELLING
 			profit = sellprice - buyprice
 			print('\nSOLD')
