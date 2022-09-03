@@ -55,6 +55,7 @@ while 1:
 		#SELL
 		data = requests.get(url).json()
 		sellprice = float(f"{data['price']}")
+		old_fc = sellprice
 		print(sellprice)
 		if sellprice - buyprice >= 0.1: #OR 0.25
 			while 1:
