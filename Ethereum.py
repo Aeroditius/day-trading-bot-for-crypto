@@ -26,7 +26,7 @@ while 1:
 	data = requests.get(url).json()
 	buyprice = float(f"{data['price']}")
 	start = timer()
-	time.sleep(10) #OLD VALUE 15
+	time.sleep(5) #OLD VALUE 15
 	data = requests.get(url).json()
 	cprice1 = float(f"{data['price']}") #no sell price because didn't sell yet | cprice = check price
 	old_fc = cprice1
