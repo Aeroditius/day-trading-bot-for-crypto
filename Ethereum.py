@@ -97,7 +97,7 @@ while 1:
 			break
 		elif sellprice <= buyprice:
 			##########
-			if sellprice - buyprice > -1 * total_profit : #REPRESENTS LOSS
+			if sellprice - buyprice < -50: #-1 * total_profit #REPRESENTS LOSS inverse signs
 				sellprice = float(f"{data['price']}") #THIS SIMULATES SELLING
 				profit = sellprice - buyprice
 				print('\nSOLD')
