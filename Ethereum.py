@@ -53,7 +53,10 @@ while 1:
 	'''
 	while 1:
 		#SELL
-		data = requests.get(url).json()
+		try:#
+			data = requests.get(url).json()
+		except ConnectionResetError:#
+			continue#
 		sellprice = float(f"{data['price']}")
 		old_fc = sellprice
 		print(sellprice)
