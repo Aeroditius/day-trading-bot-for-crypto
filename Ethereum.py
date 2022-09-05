@@ -5,6 +5,9 @@ import json
 import requests
 from timeit import default_timer as timer
 
+#watch for even higher falling values
+#get rid of slope bullshit
+
 url = "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
 
 # Place a market order by specifying amount of USD to use. 
@@ -33,7 +36,7 @@ while 1:
 	end = timer()
 	rise = cprice1 - buyprice
 	run = end - start
-	if rise/run > -0.05: #NORMALLY -0.05
+	if rise/run > 5: #NORMALLY -0.05
 		slope = rise/run
 		print(slope)
 		print('slope > -0.05\n')
@@ -43,7 +46,8 @@ while 1:
 			data = requests.get(url).json()
 			fc = float(f"{data['price']}") #FINAL CHECK
 			print('old_fc: %f\nfc: %f\n' %(old_fc, fc))
-			if old_fc - fc >= 0.1 and cprice1 >= fc: #<>=   |   old_fc - fc >= 0.1   |   old_fc >= fc
+			if old_fc - fc >= 0.1: #and cprice1 >= fc: #<>=   |   old_fc - fc >= 0.1   |   old_fc >= fc
+				time.sleep(3) ############################JUST A TEST
 				buyprice = float(f"{data['price']}") #THIS SIMULATES BUYING
 				print('Bought at: %f' %buyprice)
 				break
@@ -71,7 +75,7 @@ while 1:
 			while 1:
 				data = requests.get(url).json()
 				fc = float(f"{data['price']}") #FINAL CHECK
-				if fc - old_fc >= 0.1 and fc >= sellprice: #<>=   |   fc - old_fc >= 0.1   |   fc >= old_fc
+				if fc - old_fc >= 0.1: #and fc >= sellprice: #<>=   |   fc - old_fc >= 0.1   |   fc >= old_fc
 					break
 				else:
 					old_fc = fc
