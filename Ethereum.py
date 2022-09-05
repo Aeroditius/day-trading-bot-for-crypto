@@ -36,32 +36,23 @@ while 1:
 	end = timer()
 	rise = cprice1 - buyprice
 	run = end - start
-	if rise/run > 5: #NORMALLY -0.05
+	if rise/run > 5: #NORMALLY -0.05 #################
 		slope = rise/run
 		print(slope)
 		print('slope > -0.05\n')
 		continue
 	else:
 		while 1:
+			time.sleep(3)
 			data = requests.get(url).json()
 			fc = float(f"{data['price']}") #FINAL CHECK
 			print('old_fc: %f\nfc: %f\n' %(old_fc, fc))
-			if old_fc - fc >= 0.1: #and cprice1 >= fc: #<>=   |   old_fc - fc >= 0.1   |   old_fc >= fc
-				time.sleep(3) ############################JUST A TEST
+			if old_fc - fc >= 0.1 and cprice1 >= fc: #<>=   |   old_fc - fc >= 0.1   |   old_fc >= fc
 				buyprice = float(f"{data['price']}") #THIS SIMULATES BUYING
 				print('Bought at: %f' %buyprice)
 				break
-			#elif old_fc >= fc and cprice1 >= fc:
-			#	old_fc = fc
-			#	continue
-			#else:
-			#	buyprice = float(f"{data['price']}") #THIS SIMULATES BUYING
-			#	print('Bought at: %f' %buyprice)
-			#	break
 			else:
 				old_fc = fc
-	'''
-	'''
 	while 1:
 		#SELL
 		try:#
@@ -73,9 +64,10 @@ while 1:
 		print(sellprice)
 		if sellprice - buyprice >= 0.1: #OR 0.25
 			while 1:
+				time.sleep(3)
 				data = requests.get(url).json()
 				fc = float(f"{data['price']}") #FINAL CHECK
-				if fc - old_fc >= 0.1: #and fc >= sellprice: #<>=   |   fc - old_fc >= 0.1   |   fc >= old_fc
+				if fc - old_fc >= 0.1 and fc >= sellprice: #<>=   |   fc - old_fc >= 0.1   |   fc >= old_fc
 					break
 				else:
 					old_fc = fc
@@ -85,15 +77,12 @@ while 1:
 			print('Profit: %f' %profit)
 			total_profit = profit + old_profit
 			print('Total profit: %f' %total_profit)
-			#
 			mend = timer()
 			mtime = mend - mstart
 			print('Elapsed time: %f seconds\n' %mtime)
-			#
 			old_profit = total_profit
 			break
 		elif sellprice <= buyprice:
-			##########
 			if sellprice - buyprice < -50: #-1 * total_profit #REPRESENTS LOSS inverse signs
 				sellprice = float(f"{data['price']}") #THIS SIMULATES SELLING
 				profit = sellprice - buyprice
@@ -101,13 +90,10 @@ while 1:
 				print('Profit: %f' %profit)
 				total_profit = profit + old_profit
 				print('Total profit: %f' %total_profit)
-				#
 				mend = timer()
 				mtime = mend - mstart
 				print('Elapsed time: %f seconds\n' %mtime)
-				#
 				old_profit = total_profit
 				break
-				##########
 		else:
 			pass
