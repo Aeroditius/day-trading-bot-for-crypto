@@ -47,7 +47,7 @@ while 1:
 			data = requests.get(url).json()
 			fc = float(f"{data['price']}") #FINAL CHECK
 			print('old_fc: %f\nfc: %f\n' %(old_fc, fc))
-			if old_fc - fc >= 0.1 and cprice1 >= fc: #<>=   |   old_fc - fc >= 0.1   |   old_fc >= fc
+			if old_fc - fc >= 0.2 and cprice1 >= fc: #<>=   |   old_fc - fc >= 0.1   |   old_fc >= fc
 				buyprice = float(f"{data['price']}") #THIS SIMULATES BUYING
 				print('Bought at: %f' %buyprice)
 				break
@@ -67,7 +67,7 @@ while 1:
 				time.sleep(3)
 				data = requests.get(url).json()
 				fc = float(f"{data['price']}") #FINAL CHECK
-				if fc - old_fc >= 0.1 and fc >= sellprice: #<>=   |   fc - old_fc >= 0.1   |   fc >= old_fc
+				if fc - old_fc >= 0.2 and fc >= sellprice: #<>=   |   fc - old_fc >= 0.1   |   fc >= old_fc
 					break
 				else:
 					old_fc = fc
