@@ -34,9 +34,11 @@ while 1:
 	time.sleep(3)
 	data = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT').json()
 	fc2 = float(f"{data['price']}") #FINAL CHECK
-	old_fc = fc2
 	print('fc1: %f\nfc2: %f\n' %(fc1, fc2))
-	if fc1 - fc2 >= 0.25: #<>=   |   0.5
+	if fc1 > fc2: #<>=   |   0.5
+		continue
+	else:
+		old_fc = fc2
 		while 1:
 			data = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT').json()
 			fc = float(f"{data['price']}") #FINAL CHECK
@@ -48,8 +50,6 @@ while 1:
 		data = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT').json()
 		buyprice = float(f"{data['price']}") #THIS SIMULATES BUYING
 		print('Bought at: %f\n' %buyprice)
-	else:
-		continue
 	while 1:
 		#SELL
 		data = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT').json()
